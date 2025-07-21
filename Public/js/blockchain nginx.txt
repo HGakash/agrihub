@@ -1,0 +1,51 @@
+server {
+    listen 80; # HTTP
+    server_name yourdomain.com; # Replace with your domain
+
+    # Redirect HTTP to HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl; # HTTPS
+    server_name yourdomain.com; # Replace with your domain
+
+    # SSL Configuration
+    ssl_certificate /etc/ssl/certs/your_certificate.crt;
+    ssl_certificate_key /etc/ssl/private/your_certificate.key;
+
+    # Security Headers
+    add_header Content-Security-Policy "default-src 'self';";
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options DENY;
+    add_header X-XSS-Protection "1; mode=block";
+
+    # Rate Limiting
+    limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
+
+    location / {
+        limit_req zone=one burst=20;
+        proxy_pass http://127.0.0.1:8545; # Replace with your blockchain API endpoint
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Restrict Methods
+        if ($request_method !~ ^(GET|POST|OPTIONS)$) {
+            return 405;
+        }
+
+        # IP Whitelisting
+        allow 192.168.1.0/24; # Replace with your trusted IP range
+        deny all;
+    }
+
+    # Deny access to non-secure endpoints
+    location /admin {
+        return 403;
+    }
+}

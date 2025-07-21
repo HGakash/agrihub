@@ -1,0 +1,45 @@
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       body {
+    background-image: url('/Public/images/3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh; /* Ensures the background fits the viewport height */
+    width: 100vw; /* Ensures the background fits the viewport width */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+        .card {
+            background: rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover .button {
+            background-color: #4caf50;
+        }
+        .button:hover {
+            background-color: #388e3c;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container mx-auto p-6">
+        <h1 class="text-4xl font-bold mb-6 text-black" style="font-family: 'Roboto', sans-serif;">Available Farmers</h1>
+        <div id="farmerList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Farmer cards will be inserted here by JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Link to external script file -->
+    <script src="./js/farmer-list.js"></script>
+</body>
+</html>

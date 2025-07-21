@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Contract Farming Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            background-image: url('https://placehold.co/1920x1080/green/white?text=Background+Image');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+       .dropdown ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            display: none;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+        }
+ 
+        .dropdown ul li {
+           display: block;
+        }
+
+        .dropdown ul li a {
+           display: block;
+           padding: 10px;
+           text-decoration: none;
+           color: #333;
+        }
+
+        .dropdown ul li a:hover {
+           background-color: #f1f1f1;
+        }
+
+        .dropdown:hover ul {
+           display: block;
+        }
+    </style>
+</head>
+<body class="bg-green-100 font-sans">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-seedling text-xl text-green-600 mr-2"></i>
+            <span class="text-xl font-semibold text-green-600">SmartAgriContract</span>
+        </div>
+        <div class="flex items-center">
+            <button id="logout" class="bg-red-500 text-white px-4 py-2 rounded shadow mr-4">Logout</button>
+        </div>
+    </nav>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-1/5 bg-white h-screen p-4 shadow-md rounded-l-lg mt-4 ml-4">
+            <nav>
+                <ul>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-700 hover:text-green-600" href="register-farmer.html">
+                            <i class="fas fa-user-plus mr-2"></i>Farmer Register
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-700 hover:text-green-600" href="farmer-list.html">
+                            <i class="fas fa-user mr-2"></i>View Farmer
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-700 hover:text-green-600" href="pending-contracts.html">
+                            <i class="fas fa-file-alt mr-2"></i>View Pending Contracts
+                        </a>
+                    </li>
+                    <li class="mb-4 dropdown">
+                        <a class="flex items-center text-gray-700 hover:text-green-600">
+                          <i class="fas fa-seedling mr-2"></i>Season Wise Crops
+                        </a>
+                        <ul>
+                          <li><a href="#" class="block px-4 py-2 text-gray-700 hover:text-green-600">Summer</a></li>
+                          <li><a href="#" class="block px-4 py-2 text-gray-700 hover:text-green-600">Winter</a></li>
+                          <li><a href="#" class="block px-4 py-2 text-gray-700 hover:text-green-600">Rainy</a></li>
+                        </ul>
+                      </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-700 hover:text-green-600" href="https://mlprojectgit-4crbed5nf6appsjtwaj5ru7.streamlit.app/'">
+                            <i class="fas fa-cloud-sun-rain mr-2"></i>Weather Forecasting
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-700 hover:text-green-600" href="#">
+                            <i class="fas fa-credit-card mr-2"></i>Payment
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-700 hover:text-green-600" href="#">
+                            <i class="fas fa-landmark mr-2"></i>Government Schemes
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <!-- Main Content -->
+<div class="w-4/5 p-6 mt-4 ml-4 bg-white shadow-md rounded-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-green-700">Government Schemes</h1>
+    </div>
+
+    <div class="mb-4">
+        <a href="https://raitamitra.karnataka.gov.in/english" target="_blank">
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Link 1: Sustainable Agriculture Subsidy
+            </button>
+        </a>
+        <p class="text-gray-700 text-sm mt-2">Learn about the government scheme that offers subsidies to farmers for adopting sustainable agricultural practices.</p>
+    </div>
+    
+    <!-- Link 2 -->
+    <div class="mb-4">
+        <a href="https://pib.gov.in/PressReleaseIframePage.aspx?PRID=2002012" target="_blank">
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4">
+                Link 2: Schemes for Welfare of Farmers
+            </button>
+        </a>
+        <p class="text-gray-700 text-sm mt-2">Details of schemes being run by Department of Agriculture and Farmers’ Welfare for welfare/increasing incomes of farmers and the achievements made therein, scheme</p>
+    </div>
+    <!-- Link 3 -->
+    <div class="mb-4">
+        <a href="https://www.manage.gov.in/fpoacademy/SGSchemes/karnataka.pdf" target="_blank">
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Link 3: Agri and Animal husbandry Schemes - Karnataka
+            </button>
+        </a>
+        <p class="text-gray-700 text-sm mt-2">Providing comprehensive information regarding schemes and facilities available to
+            farmers in Agriculture and allied Developmental departments.</p>
+    </div>
+    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_companyName",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_contractDetails",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_startDate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_endDate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "_status",
+                "type": "string"
+            }
+        ],
+        "name": "addContract",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "contracts",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "companyName",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "contractDetails",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startDate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "endDate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "status",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getContract",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
