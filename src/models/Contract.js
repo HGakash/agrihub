@@ -31,10 +31,15 @@ const contractSchema = new mongoose.Schema({
         required: true,  // Ensure price per unit is provided
         min: 0  // Price per unit should be a positive number
     },
-        gstNumber: {
+    gstNumber: {
         type: String,
         required: true,  // Ensure price per unit is provided
         min: 0  // Price per unit should be a positive number
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',  // Reference to the User model (dealer who created it)
+        required: true
     },
     status: {
         type: String,
@@ -43,6 +48,6 @@ const contractSchema = new mongoose.Schema({
     }
 }, { timestamps: true });  // Automatically adds createdAt and updatedAt fields
 
-const Contract = mongoose.model('Contract', contractSchema);
+const Contract = mongoose.models.Contract || mongoose.model('Contract', contractSchema);
 
 module.exports = Contract;

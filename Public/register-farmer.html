@@ -1,49 +1,246 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Register Farmer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Farmer - SmartAgriContract</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #8fbc8f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .agri-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="4" height="4"><circle cx="2" cy="2" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            z-index: -2;
+            pointer-events: none;
+        }
+        
+        .leaf-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M20,100 Q50,50 80,100 T140,100" stroke="%23ffffff" stroke-width="0.5" fill="none" opacity="0.1"/><path d="M160,100 Q130,150 100,100 T40,100" stroke="%23ffffff" stroke-width="0.5" fill="none" opacity="0.1"/></svg>');
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .earth-card {
+            background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(45, 80, 22, 0.3);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+        
+        .sidebar-card {
+            background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(45, 80, 22, 0.2);
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            width: 256px;
+            height: calc(100vh - 96px);
+            overflow-y: auto;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 124, 89, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 124, 89, 0.6);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #8fbc8f 0%, #6b8e23 100%);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(143, 188, 143, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(143, 188, 143, 0.6);
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            display: block;
+            width: 100%;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(74, 124, 89, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 124, 89, 0.4);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(74, 124, 89, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            cursor: text;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4a7c59;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+        
+        .main-content {
+            margin-left: 288px;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+    </style>
 </head>
-<body class="bg-green-50">
-    <div class="flex justify-center items-center min-h-screen">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
-            <h1 class="text-3xl font-bold mb-6 text-green-700 flex items-center">
-                <i class="fas fa-seedling mr-2"></i> Register Farmer
-            </h1>
-            <form id="farmerForm">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Farmer Name:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Farmer Name" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Location:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="location" type="text" placeholder="Location" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="produce">Type of Produce:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="produce" type="text" placeholder="Type of Produce" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="experience">Years of Experience:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="experience" type="text" placeholder="Years of Experience" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="contact">Contact Information:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="contact" type="text" placeholder="Contact Information" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email Address:</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email Address" required>
-                </div>
-                <div class="flex items-center justify-between">
-                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Register Farmer
-                    </button>
-                    <a href="dashboard.html" class="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800" href="#">
-                        Cancel
-                    </a>
-                </div>
-            </form>
+<body>
+    <!-- Agricultural Background -->
+    <div class="agri-bg"></div>
+    <div class="leaf-pattern"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 bg-gradient-to-r from-green-800 to-green-600 shadow-lg p-4 flex justify-between items-center z-50">
+        <div class="flex items-center space-x-3">
+            <div class="bg-yellow-400 p-2 rounded-lg">
+                <i class="fas fa-tractor text-xl text-green-800"></i>
+            </div>
+            <span class="text-2xl font-bold text-white">SmartAgriContract - Farmer Registration</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button id="logout" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center space-x-2">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar-card p-6">
+        <div class="mb-8">
+            <h3 class="text-lg font-semibold text-green-800 mb-4">Farmer Navigation</h3>
+        </div>
+        <nav class="space-y-2">
+            <a href="register-farmer.html" class="sidebar-item active flex items-center space-x-3 p-3 text-green-800">
+                <i class="fas fa-user-plus text-green-600"></i>
+                <span class="font-medium">Farmer Register</span>
+            </a>
+            
+            <a href="pending-contracts.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-file-contract text-green-600"></i>
+                <span class="font-medium">Pending Contracts</span>
+            </a>
+            
+            <a href="season-crops.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-seedling text-green-600"></i>
+                <span class="font-medium">Season Crops</span>
+            </a>
+            
+            <a href="weather-forecast.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-cloud-sun-rain text-green-600"></i>
+                <span class="font-medium">Weather Forecast</span>
+            </a>
+        
+            <a href="/Public/Government Schemes.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-landmark text-green-600"></i>
+                <span class="font-medium">Govt Schemes</span>
+            </a>
+            <a href="farmer-dashboard.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-tachometer text-green-600"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="p-8">
+            <div class="earth-card p-8">
+                <h1 class="text-3xl font-bold text-green-800 mb-6 flex items-center">
+                    <i class="fas fa-user-plus mr-3"></i> Register Farmer
+                </h1>
+                
+                <form id="farmerForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-green-800 text-sm font-bold mb-2" for="name">Farmer Name:</label>
+                            <input class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                   id="name" type="text" placeholder="Enter farmer name" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-green-800 text-sm font-bold mb-2" for="location">Location:</label>
+                            <input class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                   id="location" type="text" placeholder="Enter location" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-green-800 text-sm font-bold mb-2" for="produce">Type of Produce:</label>
+                            <input class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                   id="produce" type="text" placeholder="Enter type of produce" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-green-800 text-sm font-bold mb-2" for="experience">Years of Experience:</label>
+                            <input class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                   id="experience" type="number" placeholder="Enter years of experience" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-green-800 text-sm font-bold mb-2" for="contact">Contact Information:</label>
+                            <input class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                   id="contact" type="tel" placeholder="Enter phone number" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-green-800 text-sm font-bold mb-2" for="email">Email Address:</label>
+                            <input class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                   id="email" type="email" placeholder="Enter email address" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-end space-x-4 pt-6">
+                        <a href="dashboard.html" class="btn-secondary text-white font-bold py-3 px-6 rounded focus:outline-none focus:shadow-outline transition-all">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn-primary text-white font-bold py-3 px-6 rounded focus:outline-none focus:shadow-outline transition-all">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            Register Farmer
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </body>

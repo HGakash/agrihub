@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Season Crops - SmartAgriContract</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #8fbc8f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .agri-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="4" height="4"><circle cx="2" cy="2" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            z-index: -1;
+        }
+        
+        .leaf-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M20,100 Q50,50 80,100 T140,100" stroke="%23ffffff" stroke-width="0.5" fill="none" opacity="0.1"/><path d="M160,100 Q130,150 100,100 T40,100" stroke="%23ffffff" stroke-width="0.5" fill="none" opacity="0.1"/></svg>');
+            z-index: 0;
+        }
+        
+        .earth-card {
+            background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(45, 80, 22, 0.3);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+        
+        .sidebar-card {
+            background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(45, 80, 22, 0.2);
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            width: 256px;
+            height: calc(100vh - 96px);
+            overflow-y: auto;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 124, 89, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 124, 89, 0.6);
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            display: block;
+            width: 100%;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(74, 124, 89, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 124, 89, 0.4);
+        }
+        
+        .main-content {
+            margin-left: 288px;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+        
+        .season-summer { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+        .season-winter { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+        .season-rainy { background: linear-gradient(135deg, #34d399, #059669); }
+    </style>
+</head>
+<body>
+    <!-- Agricultural Background -->
+    <div class="agri-bg"></div>
+    <div class="leaf-pattern"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 bg-gradient-to-r from-green-800 to-green-600 shadow-lg p-4 flex justify-between items-center z-50">
+        <div class="flex items-center space-x-3">
+            <div class="bg-yellow-400 p-2 rounded-lg">
+                <i class="fas fa-tractor text-xl text-green-800"></i>
+            </div>
+            <span class="text-2xl font-bold text-white">SmartAgriContract - Season Crops</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button id="logout" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center space-x-2">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar-card p-6">
+        <div class="mb-8">
+            <h3 class="text-lg font-semibold text-green-800 mb-4">Farmer Navigation</h3>
+        </div>
+        <nav class="space-y-2">
+            <a href="farmer-dashboard.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-tachometer-alt text-green-600"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            
+            <a href="register-farmer.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-user-plus text-green-600"></i>
+                <span class="font-medium">Farmer Register</span>
+            </a>
+            
+            <a href="pending-contracts.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-file-contract text-green-600"></i>
+                <span class="font-medium">Pending Contracts</span>
+            </a>
+            
+            <a href="season-crops.html" class="sidebar-item active flex items-center space-x-3 p-3 text-green-800">
+                <i class="fas fa-seedling text-green-600"></i>
+                <span class="font-medium">Season Crops</span>
+            </a>
+            
+            <a href="weather-forecast.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-cloud-sun-rain text-green-600"></i>
+                <span class="font-medium">Weather Forecast</span>
+            </a>
+        
+            <a href="/Public/Government Schemes.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+                <i class="fas fa-landmark text-green-600"></i>
+                <span class="font-medium">Govt Schemes</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <div class="earth-card p-8 mb-6">
+                <h1 class="text-3xl font-bold text-green-800 mb-2">Seasonal Crop Guide</h1>
+                <p class="text-green-700 text-lg">Comprehensive guide for optimal crop selection based on seasons</p>
+            </div>
+
+            <!-- Season Overview Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="earth-card p-6">
+                    <div class="season-summer text-white p-4 rounded-lg mb-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold">Summer Crops</h3>
+                            <i class="fas fa-sun text-2xl"></i>
+                        </div>
+                        <p class="text-sm opacity-90">March - June</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-green-800 mb-2">Top Crops:</h4>
+                        <ul class="space-y-1 text-sm text-green-700">
+                            <li>• Rice</li>
+                            <li>• Cotton</li>
+                            <li>• Maize</li>
+                            <li>• Groundnut</li>
+                        </ul>
+                        <div class="mt-4">
+                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">High Temperature</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="earth-card p-6">
+                    <div class="season-winter text-white p-4 rounded-lg mb-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold">Winter Crops</h3>
+                            <i class="fas fa-snowflake text-2xl"></i>
+                        </div>
+                        <p class="text-sm opacity-90">October - February</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-green-800 mb-2">Top Crops:</h4>
+                        <ul class="space-y-1 text-sm text-green-700">
+                            <li>• Wheat</li>
+                            <li>• Mustard</li>
+                            <li>• Barley</li>
+                            <li>• Peas</li>
+                        </ul>
+                        <div class="mt-4">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Cool Climate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="earth-card p-6">
+                    <div class="season-rainy text-white p-4 rounded-lg mb-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold">Rainy Crops</h3>
+                            <i class="fas fa-cloud-rain text-2xl"></i>
+                        </div>
+                        <p class="text-sm opacity-90">June - September</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-green-800 mb-2">Top Crops:</h4>
+                        <ul class="space-y-1 text-sm text-green-700">
+                            <li>• Jute</li>
+                            <li>• Tea</li>
+                            <li>• Coffee</li>
+                            <li>• Rubber</li>
+                        </ul>
+                        <div class="mt-4">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">High Rainfall</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Crop Information -->
+            <div class="earth-card overflow-hidden mb-6">
+                <div class="table-header p-6">
+                    <h2 class="text-2xl font-bold text-white flex items-center">
+                        <i class="fas fa-info-circle mr-3"></i>
+                        Detailed Crop Information
+                    </h2>
+                </div>
+                
+                <div class="p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                                <i class="fas fa-sun text-yellow-500 mr-2"></i>
+                                Summer Crop Details
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-yellow-500 pl-4">
+                                    <h4 class="font-semibold text-green-800">Rice</h4>
+                                    <p class="text-sm text-green-700">Planting: March-April | Harvest: June-July</p>
+                                    <p class="text-xs text-green-600 mt-1">Water requirement: High | Temperature: 25-35°C</p>
+                                </div>
+                                <div class="border-l-4 border-yellow-500 pl-4">
+                                    <h4 class="font-semibold text-green-800">Cotton</h4>
+                                    <p class="text-sm text-green-700">Planting: April-May | Harvest: September-October</p>
+                                    <p class="text-xs text-green-600 mt-1">Water requirement: Moderate | Temperature: 21-30°C</p>
+                                </div>
+                                <div class="border-l-4 border-yellow-500 pl-4">
+                                    <h4 class="font-semibold text-green-800">Maize</h4>
+                                    <p class="text-sm text-green-700">Planting: March-June | Harvest: July-October</p>
+                                    <p class="text-xs text-green-600 mt-1">Water requirement: Moderate | Temperature: 18-27°C</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                                <i class="fas fa-snowflake text-blue-500 mr-2"></i>
+                                Winter Crop Details
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-blue-500 pl-4">
+                                    <h4 class="font-semibold text-green-800">Wheat</h4>
+                                    <p class="text-sm text-green-700">Planting: October-November | Harvest: March-April</p>
+                                    <p class="text-xs text-green-600 mt-1">Water requirement: Low | Temperature: 10-25°C</p>
+                                </div>
+                                <div class="border-l-4 border-blue-500 pl-4">
+                                    <h4 class="font-semibold text-green-800">Mustard</h4>
+                                    <p class="text-sm text-green-700">Planting: October-November | Harvest: February-March</p>
+                                    <p class="text-xs text-green-600 mt-1">Water requirement: Low | Temperature: 15-25°C</p>
+                                </div>
+                                <div class="border-l-4 border-blue-500 pl-4">
+                                    <h4 class="font-semibold text-green-800">Barley</h4>
+                                    <p class="text-sm text-green-700">Planting: October-November | Harvest: March-April</p>
+                                    <p class="text-xs text-green-600 mt-1">Water requirement: Low | Temperature: 12-25°C</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planting Calendar -->
+            <div class="earth-card overflow-hidden">
+                <div class="table-header p-6">
+                    <h2 class="text-2xl font-bold text-white flex items-center">
+                        <i class="fas fa-calendar-alt mr-3"></i>
+                        Planting Calendar
+                    </h2>
+                </div>
+                
+                <div class="p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="bg-green-100">
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Crop</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Season</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Planting Period</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Harvest Period</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Temperature</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-green-200">
+                                <tr>
+                                    <td class="px-4 py-3 text-sm text-green-800">Rice</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">Summer</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">March-April</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">June-July</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">25-35°C</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm text-green-800">Cotton</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">Summer</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">April-May</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">September-October</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">21-30°C</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm text-green-800">Wheat</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">Winter</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">October-November</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">March-April</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">10-25°C</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm text-green-800">Mustard</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">Winter</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">October-November</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">February-March</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">15-25°C</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm text-green-800">Jute</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">Rainy</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">June-July</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">September-October</td>
+                                    <td class="px-4 py-3 text-sm text-green-700">25-35°C</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
+</body>
+</html>

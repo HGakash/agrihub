@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Government Schemes - SmartAgriContract</title>
+    <title>Farmer Dashboard - SmartAgriContract</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <style>
@@ -125,7 +125,7 @@
             <div class="bg-yellow-400 p-2 rounded-lg">
                 <i class="fas fa-tractor text-xl text-green-800"></i>
             </div>
-            <span class="text-2xl font-bold text-white">SmartAgriContract - Government Schemes</span>
+            <span class="text-2xl font-bold text-white">SmartAgriContract - Farmer Dashboard</span>
         </div>
         <div class="flex items-center space-x-4">
             <button id="logout" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center space-x-2">
@@ -141,7 +141,7 @@
             <h3 class="text-lg font-semibold text-green-800 mb-4">Farmer Navigation</h3>
         </div>
         <nav class="space-y-2">
-            <a href="farmer-dashboard.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
+            <a href="farmer-dashboard.html" class="sidebar-item active flex items-center space-x-3 p-3 text-green-800">
                 <i class="fas fa-tachometer-alt text-green-600"></i>
                 <span class="font-medium">Dashboard</span>
             </a>
@@ -166,7 +166,7 @@
                 <span class="font-medium">Weather Forecast</span>
             </a>
         
-            <a href="/Public/Government Schemes.html" class="sidebar-item active flex items-center space-x-3 p-3 text-green-800">
+            <a href="/Public/Government Schemes.html" class="sidebar-item flex items-center space-x-3 p-3 text-green-800 hover:bg-green-100">
                 <i class="fas fa-landmark text-green-600"></i>
                 <span class="font-medium">Govt Schemes</span>
             </a>
@@ -178,16 +178,16 @@
         <!-- Welcome Section -->
         <div class="mb-8">
             <div class="earth-card p-8 mb-6">
-                <h1 class="text-3xl font-bold text-green-800 mb-2">Welcome to Government Schemes</h1>
-                <p class="text-green-700 text-lg">Comprehensive guide for government schemes for agricultural planning</p>
+                <h1 class="text-3xl font-bold text-green-800 mb-2">Welcome back, <span id="userName">Farmer</span>!</h1>
+                <p class="text-green-700 text-lg">Role: <span id="userrole" class="font-semibold text-green-800">Farmer</span></p>
             </div>
 
-            <!-- Government Schemes Table -->
+            <!-- Accepted Contracts -->
             <div class="earth-card overflow-hidden">
                 <div class="table-header p-6">
                     <h2 class="text-2xl font-bold text-white flex items-center">
-                        <i class="fas fa-landmark mr-3"></i>
-                        Available Government Schemes
+                        <i class="fas fa-clipboard-check mr-3"></i>
+                        My Accepted Contracts
                     </h2>
                 </div>
                 
@@ -195,71 +195,34 @@
                     <table class="w-full">
                         <thead>
                             <tr class="bg-green-100">
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Scheme Name</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Description</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Eligibility</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Benefits</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Action</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Company Name</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Details</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Start Date</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">End Date</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="schemesList" class="divide-y divide-green-200">
-                            <tr>
-                                <td class="px-6 py-4 text-sm text-green-800">PM-KISAN</td>
-                                <td class="px-6 py-4 text-sm text-green-700">Pradhan Mantri Kisan Samman Nidhi</td>
-                                <td class="px-6 py-4 text-sm text-green-700">Small & Marginal Farmers</td>
-                                <td class="px-6 py-4 text-sm text-green-700">₹6,000 per year</td>
-                                <td class="px-6 py-4">
-                                    <button class="btn-primary text-white px-4 py-2 rounded-lg text-sm">Apply</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm text-green-800">PM-FBY</td>
-                                <td class="px-6 py-4 text-sm text-green-700">Pradhan Mantri Fasal Bima Yojana</td>
-                                <td class="px-6 py-4 text-sm text-green-700">All Farmers</td>
-                                <td class="px-6 py-4 text-sm text-green-700">Crop Insurance Coverage</td>
-                                <td class="px-6 py-4">
-                                    <button class="btn-primary text-white px-4 py-2 rounded-lg text-sm">Apply</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-sm text-green-800">PM-KMY</td>
-                                <td class="px-6 py-4 text-sm text-green-700">Pradhan Mantri Kisan Maan-Dhan Yojana</td>
-                                <td class="px-6 py-4 text-sm text-green-700">Small & Marginal Farmers (18-40 years)</td>
-                                <td class="px-6 py-4 text-sm text-green-700">₹3,000 monthly pension</td>
-                                <td class="px-6 py-4">
-                                    <button class="btn-primary text-white px-4 py-2 rounded-lg text-sm">Apply</button>
-                                </td>
-                            </tr>
+                        <tbody id="acceptedContractsList" class="divide-y divide-green-200">
+                            <!-- Data will be inserted here by JavaScript -->
                         </tbody>
                     </table>
                     
                     <!-- Loading State -->
-                    <div id="loadingState" class="flex justify-center items-center py-12">
+                    <div id="loadingStateAccepted" class="flex justify-center items-center py-12">
                         <div class="loading-spinner"></div>
                     </div>
                     
                     <!-- Empty State -->
-                    <div id="emptyState" class="hidden text-center py-12">
+                    <div id="emptyStateAccepted" class="hidden text-center py-12">
                         <i class="fas fa-inbox text-6xl text-green-300 mb-4"></i>
-                        <p class="text-green-700 text-lg">No schemes found</p>
+                        <p class="text-green-700 text-lg">No accepted contracts found</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Hide loading state after page loads
-        window.addEventListener('load', function() {
-            document.getElementById('loadingState').style.display = 'none';
-        });
-
-        // Logout functionality
-        document.getElementById('logout').addEventListener('click', function() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userRole');
-            window.location.href = '/login.html';
-        });
-    </script>
+    <script src="/Public/js/farmer-dashboard-clean.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
 </body>
 </html>

@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Farmers - SmartAgriContract</title>
+    <title>Dealer Dashboard - SmartAgriContract</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <style>
@@ -111,30 +110,6 @@
             align-items: center;
             gap: 24px;
         }
-
-        .farmer-card {
-            background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(45, 80, 22, 0.3);
-            border: 1px solid rgba(139, 69, 19, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .farmer-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(45, 80, 22, 0.4);
-        }
-        
-        .btn-primary {
-            position: relative;
-            z-index: 10;
-            pointer-events: auto;
-        }
-        
-        .farmer-card button {
-            cursor: pointer !important;
-            pointer-events: auto !important;
-        }
     </style>
 </head>
 <body>
@@ -152,10 +127,10 @@
         </div>
         
         <div class="nav-links">
-            <a href="dealer-dashboard.html" class="nav-item text-white font-medium">
+            <a href="dealer-dashboard.html" class="nav-item active text-white font-medium">
                 <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
             </a>
-            <a href="farmer-list.html" class="nav-item active text-white font-medium">
+            <a href="farmer-list.html" class="nav-item text-white font-medium">
                 <i class="fas fa-users mr-2"></i>View Farmers
             </a>
         </div>
@@ -170,16 +145,55 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="earth-card p-8 mx-8 mt-8">
-            <h1 class="text-3xl font-bold text-green-800 mb-6 flex items-center">
-                <i class="fas fa-users mr-3"></i> Available Farmers
-            </h1>
-            <div id="farmerList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Farmer cards will be inserted here by JavaScript -->
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <div class="earth-card p-8 mb-6 mx-8 mt-8">
+                <h1 class="text-3xl font-bold text-green-800 mb-2">Welcome back, <span id="userName">Dealer</span>!</h1>
+                <p class="text-green-700 text-lg">Role: <span id="userrole" class="font-semibold text-green-800">Dealer</span></p>
+            </div>
+
+            <!-- All My Contracts -->
+            <div class="earth-card overflow-hidden mx-8">
+                <div class="table-header p-6">
+                    <h2 class="text-2xl font-bold text-white flex items-center">
+                        <i class="fas fa-file-contract mr-3"></i>
+                        All My Contracts
+                    </h2>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-green-100">
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Farmer</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Details</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Start Date</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">End Date</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Price/Unit</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allContractsList" class="divide-y divide-green-200">
+                            <!-- Data will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <!-- Loading State -->
+                    <div id="loadingStateAll" class="flex justify-center items-center py-12">
+                        <div class="loading-spinner"></div>
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div id="emptyStateAll" class="hidden text-center py-12">
+                        <i class="fas fa-inbox text-6xl text-green-300 mb-4"></i>
+                        <p class="text-green-700 text-lg">No contracts found</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="./js/farmer-list.js"></script>
+    <script src="/Public/js/dealer-dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
 </body>
 </html>

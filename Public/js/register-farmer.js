@@ -32,7 +32,7 @@ document.getElementById('farmerForm').addEventListener('submit', async function 
 
         if (response.ok) {
             alert('Farmer registered successfully!');
-            window.location.href = 'dashboard.html'; // Redirect to dashboard on successful registration
+            window.location.href = 'farmer-dashboard.html'; // Redirect to farmer dashboard on successful registration
         } else {
             alert(`Error: ${result.message}`);
         }

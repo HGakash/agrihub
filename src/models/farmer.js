@@ -9,4 +9,4 @@ const farmerSchema = new mongoose.Schema({
     contact: String
 }, { timestamps: true });
 
-module.exports = mongoose.model('Farmer', farmerSchema);
+module.exports = mongoose.models.Farmer || mongoose.model('Farmer', farmerSchema);

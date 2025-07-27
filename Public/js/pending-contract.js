@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const contractsList = document.getElementById('contractsList');
-    const loadingDiv = document.createElement('div');
-    loadingDiv.id = 'loading';
-    loadingDiv.className = 'text-center text-green-600 mb-6';
-    loadingDiv.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Loading contracts...`;
-    contractsList.appendChild(loadingDiv);
+    const loadingDiv = document.getElementById('loading');
+    loadingDiv.classList.remove('hidden');
 
     try {
         const token = localStorage.getItem('token');
@@ -14,29 +11,54 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const response = await fetch('http://localhost:3000/contracts/farmer/mycontract', {
+        // First, get user role to determine which endpoint to use
+        const userResponse = await fetch('http://localhost:3000/api/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const userData = await userResponse.json();
+        const userRole = userData.role;
+
+        let endpoint = '';
+        if (userRole === 'dealer') {
+            // For dealers: show all contracts they created
+            endpoint = 'http://localhost:3000/contracts/dealer/all';
+        } else {
+            // For farmers: show pending contracts created for them
+            endpoint = 'http://localhost:3000/contracts/farmer/mycontract';
+        }
+
+        console.log('Fetching contracts...');
+        const response = await fetch(endpoint, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
-        if (!response.ok) throw new Error('Failed to fetch contracts');
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to fetch contracts');
+        }
 
         const contracts = await response.json();
-        loadingDiv.remove();
+        console.log('Received contracts:', contracts.length);
+        loadingDiv.classList.add('hidden');
 
         if (contracts.length === 0) {
             contractsList.innerHTML = `
-                <p class="text-center text-gray-500 text-lg mt-6">
-                    No pending contracts available.
-                </p>`;
+                <div class="col-span-full text-center py-12">
+                    <i class="fas fa-inbox text-6xl text-green-300 mb-4"></i>
+                    <p class="text-green-700 text-lg">No pending contracts available</p>
+                    <p class="text-green-600 text-sm mt-2">Dealers will create contracts for you to review</p>
+                </div>`;
             return;
         }
 
         contracts.forEach(contract => {
             const contractCard = document.createElement('div');
-            contractCard.className = "bg-white p-6 rounded-xl shadow-md border border-gray-200 floating-box";
+            contractCard.className = "contract-card p-6";
 
             contractCard.innerHTML = `
                 <div class="mb-4">
@@ -45,15 +67,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <i class="fas fa-building text-green-700"></i>
                         </div>
                         <div>
-                            <p class="text-lg font-semibold text-green-700">${contract.companyName}</p>
-                            <p class="text-sm text-gray-600">GSTIN: ${contract.gstNumber}</p>
-                            <p class="text-xs text-gray-500">Dealer</p>
+                            <p class="text-lg font-semibold text-green-800">${contract.companyName}</p>
+                            <p class="text-sm text-green-700">GSTIN: ${contract.gstNumber}</p>
+                            <p class="text-xs text-green-600">Contract by Dealer</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-sm text-gray-700 space-y-2">
-                    <p><strong>Produce:</strong> ${contract.farmerProduce}</p>
+                <div class="text-sm text-green-800 space-y-2">
                     <p><strong>Contract Details:</strong> ${contract.contractDetails}</p>
                     <p><strong>Price Per Unit:</strong> ₹${contract.pricePerUnit}</p>
                     <p><strong>Start:</strong> ${new Date(contract.startDate).toLocaleDateString()}</p>
@@ -61,11 +82,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <p><strong>Duration:</strong> ${contract.duration} years</p>
                 </div>
 
-                <div class="mt-4 flex justify-between">
-                    <button onclick="acceptContract('${contract._id}')" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg shadow">
+                <div class="mt-4 flex justify-between space-x-2">
+                    <button onclick="acceptContract('${contract._id}')" class="btn-primary text-white font-medium py-2 px-4 rounded-lg">
                         <i class="fas fa-check mr-2"></i>Accept
                     </button>
-                    <button onclick="rejectContract('${contract._id}')" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg shadow">
+                    <button onclick="rejectContract('${contract._id}')" class="btn-secondary text-white font-medium py-2 px-4 rounded-lg">
                         <i class="fas fa-times mr-2"></i>Reject
                     </button>
                 </div>
@@ -76,20 +97,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Error fetching contracts:', error);
+        loadingDiv.classList.add('hidden');
         contractsList.innerHTML = `
-            <div class="text-center mt-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded">
-                <p class="font-semibold">Failed to load contracts. Please try again later.</p>
+            <div class="col-span-full text-center mt-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded">
+                <p class="font-semibold">Failed to load contracts: ${error.message}</p>
+                <button onclick="location.reload()" class="mt-2 bg-green-600 text-white px-4 py-2 rounded">
+                    Retry
+                </button>
             </div>`;
     }
 });
 
 async function acceptContract(contractId) {
     try {
+        const token = localStorage.getItem('token');
+        
         const response = await fetch(`http://localhost:3000/contracts/accept/${contractId}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-                // 'Authorization': `Bearer ${token}`
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -97,7 +124,7 @@ async function acceptContract(contractId) {
 
         if (response.ok) {
             alert('✅ Contract accepted!');
-            window.location.href = '/Public/dashboard.html';
+            window.location.reload();
         } else {
             alert(`❌ Error: ${result.error}`);
         }
@@ -122,7 +149,7 @@ async function rejectContract(contractId) {
 
         if (response.ok) {
             alert('🗑️ Contract rejected!');
-            window.location.reload(); // ✅ Simple fix
+            window.location.reload();
         } else {
             alert(`❌ Error: ${result.error}`);
         }

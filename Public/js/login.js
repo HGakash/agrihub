@@ -24,7 +24,19 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             console.log(result.token)
             console.log('Login successful:', result);
             alert('Login successful! Redirecting to dashboard...');
-            window.location.href = '/Public/dashboard.html'; // Redirect to dashboard after login
+            
+            // Decode token to get user role
+            const tokenPayload = JSON.parse(atob(result.token.split('.')[1]));
+            const userRole = tokenPayload.role;
+            
+            // Redirect based on role
+            if (userRole === 'farmer') {
+                window.location.href = '/Public/farmer-dashboard.html';
+            } else if (userRole === 'dealer') {
+                window.location.href = '/Public/dealer-dashboard.html';
+            } else {
+                window.location.href = '/Public/dashboard.html'; // Fallback
+            }
         } else {
             console.error('Error during login:', result.message);
             alert(`Error: ${result.message}`);

@@ -5,6 +5,7 @@ require('dotenv').config();
 const authRoute = require('./src/models/routes/authRoute');
 const farmerRoute = require('./src/models/routes/farmerRoute');
 const contractRoutes = require('./src/models/routes/contractRoute');
+const weatherRoute = require('./src/models/routes/weatherRoute-fixed');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
@@ -16,11 +17,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'Public')));
 
-
 // Routes
 app.use('/api', authRoute.router);
 app.use('/api/farmers', farmerRoute);
 app.use('/contracts', contractRoutes);
+app.use('/api/weather', weatherRoute);
 
 // MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/contract_farming', {

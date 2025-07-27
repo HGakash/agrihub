@@ -11,9 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const farmerName = urlParams.get('farmerName');
     const farmerProduce = urlParams.get('farmerProduce');
 
-    // Populate input fields with URL parameters
-    farmerNameInput.value = farmerName;
-    farmerProduceInput.value = farmerProduce;
+    // Populate input fields with URL parameters if available
+    if (farmerName) farmerNameInput.value = decodeURIComponent(farmerName);
+    if (farmerProduce) farmerProduceInput.value = decodeURIComponent(farmerProduce);
+    
+    // If no URL parameters, make farmer fields editable too
+    if (!farmerName) {
+        farmerNameInput.removeAttribute('readonly');
+    }
+    if (!farmerProduce) {
+        farmerProduceInput.removeAttribute('readonly');
+    }
 
     // Calculate and display the contract duration in years
     function calculateDuration() {
@@ -42,49 +50,66 @@ document.addEventListener("DOMContentLoaded", () => {
         const endDate = document.getElementById('endDate').value;
         const pricePerUnit = parseFloat(document.getElementById('pricePerUnit').value);
         const gstNumber = document.getElementById('gstNumber').value;
-        console.log(gstNumber);
-        console.log(pricePerUnit);
+
+    // Check if token exists
+    const token = localStorage.getItem('token');
+    console.log('=== DEBUG INFO ===');
+    console.log('Current URL:', window.location.href);
+    console.log('Token in localStorage:', token);
+    console.log('All localStorage items:', {...localStorage});
+    console.log('=== END DEBUG ===');
+    
+    if (!token) {
+        alert('You must be logged in to create a contract. Redirecting to login...');
+        window.location.href = 'login.html';
+        return;
+    }
 
         // Validate form fields
         if (!companyName || !contractDetails || !startDate || !endDate || isNaN(pricePerUnit) || pricePerUnit <= 0 || endDate < startDate) {
             errorMessage.classList.remove('hidden');
-        } else {
-            errorMessage.classList.add('hidden');
+            return;
+        }
 
-            const contractData = {
-                farmerId,
-                farmerName: farmerNameInput.value,
-                farmerProduce: farmerProduceInput.value,
-                companyName,
-                contractDetails,
-                startDate,
-                endDate,
-                duration: durationYearsInput.value,
-                pricePerUnit,
-                gstNumber
-            };
+        errorMessage.classList.add('hidden');
 
-            // Send form data to the backend
-            try {
-                const response = await fetch('http://localhost:3000/contracts/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(contractData)
-                });
+        const contractData = {
+            farmerId: farmerId || null,
+            farmerName: farmerNameInput.value,
+            farmerProduce: farmerProduceInput.value,
+            companyName,
+            contractDetails,
+            startDate,
+            endDate,
+            duration: durationYearsInput.value,
+            pricePerUnit,
+            gstNumber
+        };
 
-                if (response.ok) {
-                    alert('Contract submitted successfully!');
-                    form.reset(); // Optionally reset the form fields
-                } else {
-                    const errorData = await response.json();
-                    alert('Error: ' + errorData.error);
-                }
-            } catch (error) {
-                console.error('Error submitting contract:', error);
-                alert('An error occurred. Please try again.');
+        // Send form data to the backend
+        try {
+            const response = await fetch('http://localhost:3000/contracts/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(contractData)
+            });
+
+            if (response.ok) {
+                alert('Contract submitted successfully!');
+                window.location.href = 'dealer-dashboard.html';
+            } else if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                window.location.href = 'login.html';
+            } else {
+                const errorData = await response.json();
+                alert('Error: ' + (errorData.error || 'Unknown error occurred'));
             }
+        } catch (error) {
+            console.error('Error submitting contract:', error);
+            alert('Server connection error. Make sure the backend is running on localhost:3000');
         }
     });
 });

@@ -1,7 +1,15 @@
 const express = require('express');
-const Farmer = require('../Farmer'); // Import Farmer model
+const Farmer = require('../farmer'); // Import Farmer model
 const router = express.Router();
 // const { verifyToken } = require('./authRoute'); // Import verifyToken middleware
+
+console.log('Farmer route file loaded');
+
+// Debug route to test if the file is being loaded
+router.get('/test', (req, res) => {
+    console.log('Test route hit');
+    res.json({ message: 'Farmer route is working!' });
+});
 
 // Register Farmer Route
 router.post('/', async (req, res, next) => {
@@ -17,8 +25,9 @@ router.post('/', async (req, res, next) => {
         res.status(500).json({ message: 'Error registering farmer' });
     }
 });
-//only use '/'
+
 router.get('/', async (req, res) => {
+    console.log('GET /api/farmers route hit');
     try {
         const farmers = await Farmer.find({});
         res.status(200).json(farmers);

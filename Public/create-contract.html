@@ -1,68 +1,220 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Create Contract</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Contract - SmartAgriContract</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #8fbc8f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .agri-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="4" height="4"><circle cx="2" cy="2" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            z-index: -1;
+        }
+        
+        .leaf-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M20,100 Q50,50 80,100 T140,100" stroke="%23ffffff" stroke-width="0.5" fill="none" opacity="0.1"/><path d="M160,100 Q130,150 100,100 T40,100" stroke="%23ffffff" stroke-width="0.5" fill="none" opacity="0.1"/></svg>');
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .earth-card {
+            background: linear-gradient(135deg, #f5f5dc 0%, #deb887 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(45, 80, 22, 0.3);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 124, 89, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 124, 89, 0.6);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 8px 16px;
+            margin: 0 4px;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4a7c59;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.2);
+        }
+        
+        .form-label {
+            color: #2d5016;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .main-content {
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+        
+        .top-nav {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            box-shadow: 0 4px 20px rgba(45, 80, 22, 0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-r from-green-200 via-green-300 to-green-400">
-    <div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold mb-8 text-green-700 text-center">Create Contract</h1>
-        <form id="contractForm">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="mb-4">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="farmerName">Farmer Name</label>
-                    <input class="shadow appearance-none border border-green-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" id="farmerName" type="text" disabled>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="farmerProduce">Farmer Produce</label>
-                    <input class="shadow appearance-none border border-green-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" id="farmerProduce" type="text" disabled>
-                </div>
-<!-- Dealer Information (To be filled manually) -->
-                <div class="mb-4">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="companyName">Company Name</label>
-                    <input class="shadow appearance-none border border-green-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" id="companyName" type="text">
-                </div>
-<!-- price per unit -->
-                <div class="mb-4">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="gstNumber">GST number</label>
-                    <input  id="gstNumber"  class="shadow appearance-none border border-green-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="pricePerUnit">Price per Unit</label>
-                    <input type="number" id="pricePerUnit" step="0.01" class="shadow appearance-none border border-green-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" required>
-                </div>
-                <div class="mb-4 col-span-2">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="contractDetails">Contract Details</label>
-                    <textarea class="shadow appearance-none border border-green-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" id="contractDetails" rows="5" required></textarea>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="startDate">Start Date</label>
-                    <div class="relative">
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="startDate" type="date" placeholder="dd-mm-yyyy" required>
+<body>
+    <!-- Agricultural Background -->
+    <div class="agri-bg"></div>
+    <div class="leaf-pattern"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 top-nav shadow-lg p-4 flex justify-between items-center z-50">
+        <div class="flex items-center space-x-3">
+            <div class="bg-yellow-400 p-2 rounded-lg">
+                <i class="fas fa-store text-xl text-green-800"></i>
+            </div>
+            <span class="text-2xl font-bold text-white">SmartAgriContract</span>
+        </div>
+        
+        <div class="nav-links">
+            <a href="farmer-list.html" class="nav-item text-white font-medium">
+                <i class="fas fa-users mr-2"></i>View Farmers
+            </a>
+            <a href="dealer-dashboard.html" class="nav-item active text-white font-medium">
+                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+            </a>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <button id="logout" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center space-x-2">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="mx-8">
+            <div class="earth-card p-8">
+                <h1 class="text-3xl font-bold text-green-800 mb-6 flex items-center">
+                    <i class="fas fa-file-signature mr-3"></i> Create Contract
+                </h1>
+                <form id="contractForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="form-label" for="farmerName">Farmer Name</label>
+                            <input class="form-input w-full" id="farmerName" type="text" placeholder="Enter farmer name" required>
+                        </div>
+                        <div>
+                            <label class="form-label" for="farmerProduce">Farmer Produce</label>
+                            <input class="form-input w-full" id="farmerProduce" type="text" placeholder="Enter produce type" required>
+                        </div>
+                        
+                        <div>
+                            <label class="form-label" for="companyName">Company Name</label>
+                            <input class="form-input w-full" id="companyName" type="text" placeholder="Enter your company name" required>
+                        </div>
+                        
+                        <div>
+                            <label class="form-label" for="gstNumber">GST Number</label>
+                            <input id="gstNumber" class="form-input w-full" placeholder="Enter GST number" required>
+                        </div>
+                        
+                        <div>
+                            <label class="form-label" for="pricePerUnit">Price per Unit</label>
+                            <input type="number" id="pricePerUnit" step="0.01" class="form-input w-full" placeholder="0.00" required>
+                        </div>
+                        
+                        <div>
+                            <label class="form-label" for="startDate">Start Date</label>
+                            <input class="form-input w-full" id="startDate" type="date" required>
+                        </div>
+                        
+                        <div>
+                            <label class="form-label" for="endDate">End Date</label>
+                            <input class="form-input w-full" id="endDate" type="date" required>
+                        </div>
+                        
+                        <div>
+                            <label class="form-label" for="durationYears">Contract Duration (years)</label>
+                            <input class="form-input w-full" id="durationYears" type="text" readonly placeholder="Calculated automatically">
+                        </div>
                     </div>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="endDate">End Date</label>
-                    <div class="relative">
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="endDate" type="date" placeholder="dd-mm-yyyy" required>
-                 </div>
-                </div>
-                <div class="mb-4 col-span-2">
-                    <label class="block text-green-700 text-sm font-bold mb-2" for="durationYears">Contract Duration</label>
-                    <input class="shadow appearance-none border border-green-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" id="durationYears" type="text" disabled>
-                </div>
+                    
+                    <div>
+                        <label class="form-label" for="contractDetails">Contract Details</label>
+                        <textarea class="form-input w-full" id="contractDetails" rows="4" required></textarea>
+                    </div>
+                    
+                    <div id="errorMessage" class="text-red-600 text-sm hidden">
+                        Please make sure all fields are filled correctly and the end date is after the start date.
+                    </div>
+                    
+                    <div class="flex items-center justify-end">
+                        <button class="btn-primary text-white font-bold py-3 px-6 rounded-lg" type="submit">
+                            <i class="fas fa-paper-plane mr-2"></i>Submit Contract
+                        </button>
+                    </div>
+                </form>
             </div>
-<!-- Error Message (Hidden initially) -->
-            <div id="errorMessage" class="text-red-500 text-sm mb-4 hidden">
-                Please make sure all fields are filled correctly and the end date is after the start date.
-            </div>
-            <div class="flex items-center justify-center">
-                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline" type="submit">
-                    Submit Contract
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
-<script src = "js/create-contract.js"></script>
+
+    <script src="js/create-contract.js"></script>
 </body>
 </html>
